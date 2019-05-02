@@ -1,6 +1,6 @@
 public class UserServiceImpl{
     private UserDAO userDAO;
-    privare Security secuirty;
+    private Security security;
 
     public void assignPassword(User user) throws Exception {
         String passwordMD5 = security.md5(user.getPassword());
@@ -9,7 +9,7 @@ public class UserServiceImpl{
     }
 
     public UserServiceImpl(UserDAO dao, Security security){
-        this.UserDAO = dao;
+        this.userDAO = dao;
         this.security = security;
     }
 
