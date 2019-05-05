@@ -1,5 +1,5 @@
 public interface User {
-    String getPassword();
+    Object getPassword();
 
     void setPassword(String passwordMD5);
 }

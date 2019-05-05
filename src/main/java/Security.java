@@ -1,3 +1,3 @@
 public interface Security {
-    String md5(String password);
+    String md5(Object password);
 }
