@@ -1,3 +1,9 @@
+package services;
+
+import interfaces.Security;
+import interfaces.User;
+import interfaces.UserDAO;
+
 public class UserServiceImpl{
     private UserDAO userDAO;
     private Security security;

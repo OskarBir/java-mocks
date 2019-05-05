@@ -1,10 +1,13 @@
+import interfaces.Security;
+import interfaces.User;
+import interfaces.UserDAO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import services.UserServiceImpl;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class UserServiceImplSelfMockTest {
-    private static String PASSWORD1;
     private static UserDAO userDAO;
     private static Security security;
     private static User user;
@@ -12,7 +15,6 @@ public class UserServiceImplSelfMockTest {
 
     @BeforeEach
     public void setUp() {
-        PASSWORD1 = "abc123";
         userDAO = new UserDaoMock();
         security = new SecurityMock();
         user = new UserMock();
