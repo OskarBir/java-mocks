@@ -1,13 +1,12 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class UserServiceImplTests {
 
     private static String PASSWORD1;
-    private static String PASSWORD2;
     private static UserDAO userDAO;
     private static Security security;
     private static User user;
@@ -16,13 +15,16 @@ public class UserServiceImplTests {
     @BeforeEach
     public void setUp() {
         PASSWORD1 = "abc123";
-        PASSWORD2 = "def456";
         userDAO = mock(UserDAO.class);
         security = mock(Security.class);
         user = mock(User.class);
         userService = new UserServiceImpl(userDAO, security);
     }
 
+    @Test
+    public void notNullUserService() {
+        assertNotNull(userService);
+    }
     @Test
     public void assignNewPasswordToUser() throws Exception {
         when(security.md5(user.getPassword())).thenReturn(PASSWORD1);
@@ -40,10 +42,37 @@ public class UserServiceImplTests {
 
     @Test
     public void assignNewPasswordWhenDAOThrowsException() {
-        when(user.getPassword()).thenReturn(PASSWORD1);
-        when(security.md5(PASSWORD1)).thenReturn(PASSWORD2);
+        when(security.md5(user.getPassword())).thenReturn(PASSWORD1);
         doThrow(new IllegalStateException()).when(userDAO).updateUser(user);
         UserServiceImpl userService = new UserServiceImpl(userDAO, security);
         assertThrows(IllegalStateException.class, () -> userService.assignPassword(user));
+    }
+
+    @Test
+    public void assignNewPasswordWhenMD5ThrowsException() {
+        when(security.md5(user.getPassword())).thenReturn(PASSWORD1);
+        doThrow(new IllegalStateException()).when(userDAO).updateUser(user);
+        UserServiceImpl userService = new UserServiceImpl(userDAO, security);
+        assertThrows(IllegalStateException.class, () -> userService.assignPassword(user));
+    }
+
+    @Test
+    public void assignNewPasswordWhenThereIsNoUserThrowsException() {
+        user = null;
+        assertThrows(NullPointerException.class, () -> userService.assignPassword(user));
+    }
+
+    @Test
+    public void isPasswordCorrect() throws Exception {
+        when(user.getPassword()).thenReturn("123456789");
+        userService.assignPassword(user);
+        assertEquals(user.getPassword(), "123456789");
+    }
+
+    @Test
+    public void constructorTest() {
+        UserServiceImpl userService = new UserServiceImpl(userDAO, security);
+        assertSame(userService.getUserDAO(), userDAO);
+        assertSame(userService.getSecurity(), security);
     }
 }

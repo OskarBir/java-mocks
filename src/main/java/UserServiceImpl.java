@@ -13,4 +13,12 @@ public class UserServiceImpl{
         this.security = security;
     }
 
+    public UserDAO getUserDAO() {
+        return userDAO;
+    }
+
+    public Security getSecurity() {
+        return security;
+    }
+
 }
