@@ -23,36 +23,27 @@ public class UserServiceImplSelfMockTest {
     public void notNullUserService() {
         assertNotNull(userService);
     }
-//    @Test
-//    public void assignNewPasswordToUser() throws Exception {
-//        when(security.md5(user.getPassword())).thenReturn(PASSWORD1);
-//        userService.assignPassword(user);
-//        verify(userDAO).updateUser(user);
-//    }
 
-//    @Test
-//    public void assignNewPasswordToUserWithNoPassword(){
-//        when(user.getPassword()).thenReturn(null);
-//        when(security.md5(null)).thenThrow(new NullPointerException());
-//        UserServiceImpl userService = new UserServiceImpl(userDAO, security);
-//        assertThrows(NullPointerException.class, () -> userService.assignPassword(user));
-//    }
+    @Test
+    public void assignNewPasswordToUser() {
+        assertTrue(userDAO.updateUser(user));
+        assertTrue(user.setPassword(security.md5(user.getPassword())));
+    }
 
-//    @Test
-//    public void assignNewPasswordWhenDAOThrowsException() {
-//        when(security.md5(user.getPassword())).thenReturn(PASSWORD1);
-//        doThrow(new IllegalStateException()).when(userDAO).updateUser(user);
-//        UserServiceImpl userService = new UserServiceImpl(userDAO, security);
-//        assertThrows(IllegalStateException.class, () -> userService.assignPassword(user));
-//    }
+    @Test
+    public void assignNewPasswordToUserWithNoPassword(){
+        assertThrows(NullPointerException.class, () -> security.md5(null));
+    }
 
-//    @Test
-//    public void assignNewPasswordWhenMD5ThrowsException() {
-//        when(security.md5(user.getPassword())).thenReturn(PASSWORD1);
-//        doThrow(new IllegalStateException()).when(userDAO).updateUser(user);
-//        UserServiceImpl userService = new UserServiceImpl(userDAO, security);
-//        assertThrows(IllegalStateException.class, () -> userService.assignPassword(user));
-//    }
+    @Test
+    public void assignNewPasswordWhenDAOThrowsException() {
+        assertThrows(IllegalStateException.class, () -> userDAO.updateUser(null));
+    }
+
+    @Test
+    public void assignNewPasswordWhenMD5ThrowsException() {
+        assertThrows(NullPointerException.class, () -> security.md5(null));
+    }
 
     @Test
     public void assignNewPasswordWhenThereIsNoUserThrowsException() {
@@ -60,12 +51,10 @@ public class UserServiceImplSelfMockTest {
         assertThrows(NullPointerException.class, () -> userService.assignPassword(user));
     }
 
-//    @Test
-//    public void isPasswordCorrect() throws Exception {
-//        when(user.getPassword()).thenReturn("123456789");
-//        userService.assignPassword(user);
-//        assertEquals(user.getPassword(), "123456789");
-//    }
+    @Test
+    public void isPasswordCorrect() {
+        assertEquals(user.getPassword(), "123456789");
+    }
 
     @Test
     public void constructorTest() {
@@ -78,28 +67,32 @@ public class UserServiceImplSelfMockTest {
 class UserDaoMock implements UserDAO{
 
     @Override
-    public void updateUser(User user) {
-
+    public Boolean updateUser(User user) {
+        if(user == null)
+            throw new IllegalStateException();
+        return true;
     }
 }
 
 class SecurityMock implements Security{
 
     @Override
-    public String md5(Object password) {
-        return null;
+    public String md5(String password) {
+        if(password == null)
+            throw new NullPointerException();
+        return password;
     }
 }
 
 class UserMock implements User{
 
     @Override
-    public Object getPassword() {
-        return null;
+    public String getPassword() {
+        return "123456789";
     }
 
     @Override
-    public void setPassword(String passwordMD5) {
-
+    public Boolean setPassword(String passwordMD5) {
+        return true;
     }
 }

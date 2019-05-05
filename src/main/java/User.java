@@ -1,5 +1,5 @@
 public interface User {
-    Object getPassword();
+    String getPassword();
 
-    void setPassword(String passwordMD5);
+    Boolean setPassword(String passwordMD5);
 }

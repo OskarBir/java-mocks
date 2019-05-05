@@ -1,3 +1,3 @@
 public interface UserDAO {
-    void updateUser(User user);
+    Boolean updateUser(User user);
 }
