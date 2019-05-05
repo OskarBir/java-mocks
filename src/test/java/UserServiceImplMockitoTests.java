@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class UserServiceImplTests {
+public class UserServiceImplMockitoTests {
 
     private static String PASSWORD1;
     private static UserDAO userDAO;
